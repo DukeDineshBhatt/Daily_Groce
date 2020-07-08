@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:723362617491:android:c4804c1b215a2357",
         "android_client_info": {
-          "package_name": "com.mr.emartindia"
+          "package_name": "com.mr.dailygroce"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "723362617491-7criud8kk0t9l9jhth8gm0tmo4qatmqp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mr.emartindia",
+            "package_name": "com.mr.dailygroce",
             "certificate_hash": "93f555d2b34ca486dcfcd2b7f2ad9f13e89bf194"
           }
         },
