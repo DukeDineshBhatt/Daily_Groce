@@ -32,7 +32,7 @@
         android:padding="10dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="8dp"
-        android:text="eWALLET - "
+        android:text="WALLET - "
         android:gravity="end"
         android:textColor="#ffffff"
         android:textStyle="bold"
@@ -72,12 +72,14 @@
             android:layout_height="wrap_content"
             android:padding="15dp"
             android:text="West Delhi"
+            android:visibility="gone"
             android:id="@+id/home"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:visibility="gone"
             android:background="#cdcdcd"
             />
 

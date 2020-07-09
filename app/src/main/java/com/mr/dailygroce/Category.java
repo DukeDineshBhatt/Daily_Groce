@@ -42,6 +42,7 @@ public class Category extends AppCompatActivity {
     ProgressBar progress;
     List<Cat> list;
     CategoryAdapter adapter;
+    String lid = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,7 @@ public class Category extends AppCompatActivity {
 
         AllApiIneterface cr = retrofit.create(AllApiIneterface.class);
 
-        Call<homeBean> call = cr.getHome();
+        Call<homeBean> call = cr.getHome(lid);
         call.enqueue(new Callback<homeBean>() {
             @Override
             public void onResponse(Call<homeBean> call, Response<homeBean> response) {

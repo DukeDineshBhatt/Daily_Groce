@@ -38,6 +38,7 @@ import com.mr.dailygroce.homePOJO.Best;
 import com.mr.dailygroce.homePOJO.Cat;
 import com.mr.dailygroce.homePOJO.Member;
 import com.mr.dailygroce.homePOJO.homeBean;
+import com.mr.dailygroce.locationPOJO.locationBean;
 import com.mr.dailygroce.seingleProductPOJO.singleProductBean;
 import com.nostra13.universalimageloader.BuildConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -77,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
     List<Best> list2;
     List<Cat> list3;
     List<Banners> list4;
-    TextView count, rewards, login, terms, about, address, logout, cart , orders;
+    TextView count, rewards, login, terms, about, address, logout, cart , orders , location;
     ImageButton cart1;
     EditText search;
     OfferAdapter adapter;
-
+    String lid = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout);
         cart = findViewById(R.id.cart);
         search = findViewById(R.id.search);
+        location = findViewById(R.id.location);
 
         list = new ArrayList<>();
         list1 = new ArrayList<>();
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (uid.length() > 0) {
             login.setText(SharePreferenceUtils.getInstance().getString("phone"));
-            rewards.setText("REWARD POINTS - " + SharePreferenceUtils.getInstance().getString("rewards"));
+            rewards.setText("WALLET - " + SharePreferenceUtils.getInstance().getString("rewards"));
             //rewards.setVisibility(View.VISIBLE);
             getRew();
         } else {
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, Web.class);
                 intent.putExtra("title", "Terms & Conditions");
-                intent.putExtra("url", "https://mrtecks.com/janathabazaar/api/terms.php");
+                intent.putExtra("url", "https://technuoma.com/dailygroce/terms.php");
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
 
@@ -235,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, Web.class);
                 intent.putExtra("title", "About Us");
-                intent.putExtra("url", "https://mrtecks.com/janathabazaar/api/about.php");
+                intent.putExtra("url", "https://technuoma.com/dailygroce/about.php");
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
 
@@ -424,39 +426,65 @@ public class MainActivity extends AppCompatActivity {
 
         AllApiIneterface cr = retrofit.create(AllApiIneterface.class);
 
-        Call<homeBean> call = cr.getHome();
-        call.enqueue(new Callback<homeBean>() {
+        Call<locationBean> call1 = cr.getLocation();
+
+        call1.enqueue(new Callback<locationBean>() {
             @Override
-            public void onResponse(Call<homeBean> call, Response<homeBean> response) {
+            public void onResponse(Call<locationBean> call2, Response<locationBean> response2) {
 
 
-                if (response.body().getStatus().equals("1")) {
-
-
-                    BannerAdapter adapter1 = new BannerAdapter(getSupportFragmentManager(), response.body().getPbanner());
-                    pager.setAdapter(adapter1);
-                    indicator.setViewPager(pager);
-
-                    adapter2.setData(response.body().getBest());
-                    adapter3.setData(response.body().getToday());
-                    //adapter4.setData(response.body().getBest());
-                    //adapter5.setData(response.body().getToday());
-                    //adapter7.setData(response.body().getToday());
-                    adapter6.setData(response.body().getCat());
-                    adapter.setData(response.body().getObanner());
-
+                try {
+                        location.setText(response2.body().getData().get(0).getCity());
+                        lid = response2.body().getData().get(0).getId();
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
                 }
 
-                progress.setVisibility(View.GONE);
 
+                Call<homeBean> call = cr.getHome(lid);
+                call.enqueue(new Callback<homeBean>() {
+                    @Override
+                    public void onResponse(Call<homeBean> call, Response<homeBean> response) {
+
+
+                        if (response.body().getStatus().equals("1")) {
+
+
+                            BannerAdapter adapter1 = new BannerAdapter(getSupportFragmentManager(), response.body().getPbanner());
+                            pager.setAdapter(adapter1);
+                            indicator.setViewPager(pager);
+
+                            adapter2.setData(response.body().getBest());
+                            adapter3.setData(response.body().getToday());
+                            //adapter4.setData(response.body().getBest());
+                            //adapter5.setData(response.body().getToday());
+                            //adapter7.setData(response.body().getToday());
+                            adapter6.setData(response.body().getCat());
+                            adapter.setData(response.body().getObanner());
+
+                        }
+
+                        progress.setVisibility(View.GONE);
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<homeBean> call, Throwable t) {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
 
             }
 
             @Override
-            public void onFailure(Call<homeBean> call, Throwable t) {
+            public void onFailure(Call<locationBean> call2, Throwable t2) {
                 progress.setVisibility(View.GONE);
             }
         });
+
+
 
         loadCart();
     }
@@ -922,7 +950,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                rewards.setText("e WALLET - " + response.body());
+                rewards.setText("WALLET - " + response.body());
 
                 progress.setVisibility(View.GONE);
 

@@ -104,7 +104,7 @@ public class Spalsh extends AppCompatActivity {
 
     void startApp(){
 
-        FirebaseMessaging.getInstance().subscribeToTopic("emart").addOnCompleteListener(task -> Log.d("task" , task.toString()));
+        FirebaseMessaging.getInstance().subscribeToTopic("dailygroce").addOnCompleteListener(task -> Log.d("task" , task.toString()));
 
         t = new Timer();
 
